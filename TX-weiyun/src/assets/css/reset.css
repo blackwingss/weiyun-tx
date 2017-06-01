@@ -1,0 +1,58 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
+  font: 14px/1.5 -apple-system,BlinkSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Helevetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased;
+    color: #020202;
+    outline: 0;
+    overflow: hidden;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+i {
+  font-style: normal;
+  font-weight: 400;
+}
+.icon {
+  position: relative;
+  vertical-align: middle;
+  background-image: url(https://qzonestyle.gtimg.cn/qz-proj/wy-pc/css/sprite/page-home-kie170524112741.png);
+  background-repeat: no-repeat;
+  font-size: 0;
+  display: inline-block;
+  overflow: hidden;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+  border-radius: 0;
+  background-color: #f5f6f9;
+  border: 1px solid #eff1f5;
+}
+::-webkit-scrollbar-button:hover {
+  border-color: #5F6366;
+}
+::-webkit-scrollbar-button {
+  width: 8px;
+  height: 10px;
+  border: 1px solid #B5BBBF;
+  display: none;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9198a6;
+  border-color: #9198a6;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d8dce5;
+}
+
