@@ -6,53 +6,65 @@
 
 'use strict'
 
+const router = require('express').Router()
 const AV = require('leanengine')
 const tool = require('../util/tool')
 
 let content = {}
 
-// 主页
-content.index = (req, res) => {
-  res.render('index')
-}
-
-// micelid
-content.micelid = (req, res) => {
-  res.render('micelid')
-}
-
-// 微云项目
-content.weiyun = (req, res) => {
-  res.render('weiyun')
-}
-
 // api
-content.todos = async (req, res) => {
-  const queryTodos = () => {
-    const query = new AV.Query('Todo')
-    query.descending('createdAt')
-    return query.find()
-  }
-  try {
-    const data = await queryTodos()
-    if (data) {
-      let arr = []
-      for (let item of data) {
-        let result = {}
-        result.objectId = item.get('objectId')
-        result.content = item.get('content')
-        result.ACL = item.get('ACL')
-        result.createdAt = item.get('createdAt').Format('yyyy-MM-dd hh:mm:ss')
-        arr.push(result)
+content.getTodos = async (req, res) => {
+  // es7 async
+  // const queryTodos = () => {
+  //   const query = new AV.Query('Todo')
+  //   query.descending('createdAt')
+  //   return query.find()
+  // }
+  // try {
+  //   const data = await queryTodos()
+  //   if (data) {
+  //     let arr = []
+  //     for (let item of data) {
+  //       let result = {}
+  //       result.objectId = item.get('objectId')
+  //       result.content = item.get('content')
+  //       result.ACL = item.get('ACL')
+  //       result.createdAt = item.get('createdAt').Format('yyyy-MM-dd hh:mm:ss')
+  //       arr.push(result)
+  //     }
+  //     res.send(arr)
+  //   } else {
+  //     throw new Error('Can not find.')
+  //   }    
+  // }
+  // catch (error) {
+  //   tool.l(error)
+  // }
+  // es6 Promise
+  const queryTodo = () => {
+    return new Promise((resolve, reject) => {
+      const query = new AV.Query('Todo')
+      query.descending('createdAt')
+      const data = query.find()
+      if (data) {
+        resolve(data)
+      } else {
+        reject()
       }
-      res.send(arr)
-    } else {
-      throw new Error('Can not find.')
-    }    
+    })
   }
-  catch (error) {
-    tool.l(error)
-  }
+  queryTodo()
+    .then(data => {
+      let dataArr = []
+      for (let item of data) {
+        let result = {
+          objectId: item.get('objectId'),
+          content: item.get('content')
+        }
+        dataArr.push(result)
+      }
+      res.send(dataArr)
+    }).catch(new Error('Can not find'))
 }
 
 // 对Date的扩展，将 Date 转化为指定格式的String

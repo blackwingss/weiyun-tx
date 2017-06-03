@@ -18,10 +18,9 @@ const app = express()
 // babel 编译
 require('babel-core/register')
 
-// 各个模块
-const apiRouter = require('./router/api-router')
-const tool = require('./util/tool')
+// 配置模块和路由
 const config = require('./config/config')
+const router = require('./router')
 
 // 设置 view 引擎
 app.set('views', path.join(__dirname, 'views'))
@@ -67,17 +66,6 @@ app.all('/api/*', (req, res, next) => {
 })
 
 // 路由
-app.use('/', apiRouter)
-app.use('/weiyun', apiRouter)
-app.use('/micelid', apiRouter)
-// api
-app.use('/api', apiRouter)
-
-// 如果任何路由都没有匹配到，则认为是 404
-// 生成一个异常让后面的 err handle 捕获
-// app.use((req, res, next) => {
-//   res.sendFile(path.dirname(require.main.filename) + '/public/index.html')
-//   // res.status(404)
-// })
+router(app)
 
 module.exports = app
