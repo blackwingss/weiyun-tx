@@ -11,5 +11,13 @@ export default {
       }, err => {
         commit(types.GET_TODOS_FAIL, err)
       })
+  },
+  upload ({ commit }, localPath) {
+    axios.post(API_ROOT + '/api/upload', {localPath: localPath})
+    .then(res => {
+      commit(types.UPLOAD_FILE, res.data)
+    }).catch(err => {
+      commit(types.UPLOAD_FILE_FAIL, err)
+    })
   }
 } 

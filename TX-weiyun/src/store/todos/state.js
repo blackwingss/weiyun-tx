@@ -1,4 +1,6 @@
 export default {
   todos: [],
-  errmsg: ''
+  errMsg1: '',
+  errMsg2: '',
+  msg: ''
 }

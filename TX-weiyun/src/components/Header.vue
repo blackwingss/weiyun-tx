@@ -8,11 +8,11 @@
     <div class="w-header__taskbtn fl">
       <i class="icon icon-task"></i>
     </div>
-    <div class="w-header__search fl">
+    <div class="w-header__search fl" :class="{'active': !searchState}">
       <i class="icon icon-search"></i>
-      <label>输入文件名</label>
-      <input type="text" id="search">
-      <span class="close">
+      <label v-show="searchState">输入文件名</label>
+      <input type="text" id="search" :class="{'active': !searchState}" @focus="focus" @blur="blur">
+      <span class="close" v-show="!searchState">
         <i class="icon icon-close"></i>
       </span>
     </div>
@@ -28,25 +28,65 @@
         </div>
       </div>      
     </div>
-    <div class="w-header__addbtn fr">
-      <input id="_upload_html5_input" name="file" type="file" multiple="multiple" style="display: none;">
-      <label for="_upload_html5_input">
-        <div class="addbtn">
-          <i class="icon icon-add"></i>
-          <span class="addbtn-txt">
-            添加
-          </span>
-        </div>
-      </label>
+    <div class="w-header__addbtn fr" @mouseover="mouseOver" @mouseout="mouseOut">
+      <form enctype="multipart/form-data" method="post" action="http://localhost:3000/api/upload">
+        <input id="_upload_html5_input" name="iconImage" type="file" multiple="multiple" style="display: none;">
+        <input type="submit" name="submit" value="上传">
+      </form>
+      <div class="addbtn">
+        <i class="icon icon-add"></i>
+        <span class="addbtn-txt">
+          上传文件
+        </span>
+      </div> 
+      <span>{{msg}}</span>
     </div>
+    <transition name="fadeInUp">
+    <div class="w-header__upload-panel" v-show="uploadState" @mouseover="mouseOver" @mouseout="mouseOut">
+      <label for="_upload_html5_input">
+          <div class="upload-panel">+</div>
+          <b class="arrow-border"></b>
+          <b class="arrow"></b>
+        </label>
+    </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import util from "../util/util.js";
+import API_ROOT from '../config.js';
+import { mapGetters } from 'vuex';
 export default {
-  mounted () {
-    util.focus()
+  data () {
+    return {
+      uploadState: false,
+      searchState: true
+    }
+  },
+  computed: {
+     ...mapGetters({
+      msg: 'upload_msg'
+    }),
+  },
+  methods: {
+    mouseOver () {
+      this.uploadState = true   
+    },
+    mouseOut () {
+      this.uploadState = false
+    },
+    focus () {
+      this.searchState = false
+    },
+    blur (e) {
+      e.target.value = ''        
+      this.searchState = true
+    },
+    fileChoosed (e) {
+      // console.log(e.target.files[0])
+      // let localPath = e.target.value
+      // this.$store.dispatch('upload', localPath)
+    }
   }
 }
 </script>
@@ -122,11 +162,12 @@ export default {
       transition: opacity .5s;
     }
     input {
-      opacity: 0;
+      position: relative;
       border: none;
       outline: none;
       width: 93px;
       height: 20px;
+      background-color: transparent;
       line-height: 17px;
       -webkit-border-radius: 20px;
       -moz-border-radius: 20px;
@@ -134,9 +175,11 @@ export default {
       color: #a2a2a2;
       padding: 6px 0 8px 35px;
       transition: width .5s;
+      &.active {
+        width: 150px;
+      }
     }
     .close {
-      display: none;
       position: absolute;
       right: 0;
       top: 0;
@@ -222,6 +265,7 @@ export default {
     position: relative;
     float: right;
     padding: 12px 0;
+    height: 100%;
     margin: 0 40px 0 0;
     z-index: 3;
     .addbtn {
@@ -235,6 +279,10 @@ export default {
       color: #fff;
       text-align: center;
       cursor: pointer;
+      &:hover {
+        background-color: #00a4ff;
+        opacity: .7;
+      }
       .icon {
         margin: 0 6px 0 -3px;
         top: -1px;
@@ -250,6 +298,62 @@ export default {
         top: -1px;
         vertical-align: middle;
       }
+    }    
+  }
+  .w-header__upload-panel {
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    box-sizing: border-box;
+    background-color: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    z-index: 10;
+    border: 1px solid #c8ccd3;
+    box-shadow: 0 1px 4px 0 rgba(15,32,65,.2);
+    width: 320px;
+    height: 100px;
+    opacity: 1;
+    &.fadeInUp-enter,&.fadeIn-leave-active {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    &.fadeInUp-enter-active,&.fadeIn-leave-active {
+      -webkit-transition: all .3s;
+      -moz-transition: all .3s;
+      transition: all .3s;
+    }
+    .upload-panel {
+      width: 50px;
+      height: 50px;
+      margin: 10px 0 0 10px;
+      border: 1px dotted #333;
+      line-height: 45px;
+      text-align: center;
+      font-size: 40px;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(0,0,0,.2);
+      }
+    }
+    .arrow-border, .arrow{
+      position: absolute;
+      width: 0;
+      height: 0;
+      bottom: 100%;
+      left: 64%;        
+      border: solid transparent;        
+      font-weight: 400;
+    }
+    .arrow-border {
+      border-width: 9px 8px;
+      border-bottom-color: #c8ccd3;
+    }
+    .arrow{
+      border-width: 8px 7px;
+      margin-left: 1px;
+      border-bottom-color: #fff;
     }
   }
 }

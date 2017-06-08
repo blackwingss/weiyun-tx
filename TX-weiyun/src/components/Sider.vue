@@ -10,7 +10,7 @@
         <div class="w-sider__vipbtn">
           开通会员
         </div>
-        <ul class="options">
+        <ul class="options" ref="ul">
           <li class="option">
             <router-link to="/recent">     
               <i class="icon icon-ren"></i>
@@ -87,10 +87,20 @@
 </template>
 
 <script>
-import util from '../util/util.js';
 export default {
   mounted () {
-    util.addClass()
+    let items = Array.from(this.$refs.ul.childNodes)
+    items.map(item => {
+      if (/option/.test(item.className)) {
+        item.addEventListener('click', function() {
+          items.forEach(item => {
+            if(/option/.test(item.className))
+            item.className = 'option'
+          })
+          this.className += ' active'
+        })
+      }
+    })
   }
 }
 </script>

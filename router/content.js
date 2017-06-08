@@ -7,40 +7,43 @@
 'use strict'
 
 const router = require('express').Router()
+const multiparty = require('multiparty');
+const fs = require('fs')
 const AV = require('leanengine')
 const tool = require('../util/tool')
 
 let content = {}
 
-// api
-content.getTodos = async (req, res) => {
-  // es7 async
-  // const queryTodos = () => {
-  //   const query = new AV.Query('Todo')
-  //   query.descending('createdAt')
-  //   return query.find()
+// api es7 async
+  // content.getTodos = async (req, res) => {
+  //   const queryTodos = () => {
+  //     const query = new AV.Query('Todo')
+  //     query.descending('createdAt')
+  //     return query.find()
+  //   }
+  //   try {
+  //     const data = await queryTodos()
+  //     if (data) {
+  //       let arr = []
+  //       for (let item of data) {
+  //         let result = {}
+  //         result.objectId = item.get('objectId')
+  //         result.content = item.get('content')
+  //         result.ACL = item.get('ACL')
+  //         result.createdAt = item.get('createdAt').Format('yyyy-MM-dd hh:mm:ss')
+  //         arr.push(result)
+  //       }
+  //       res.send(arr)
+  //     } else {
+  //       throw new Error('Can not find.')
+  //     }    
+  //   }
+  //   catch (error) {
+  //     tool.l(error)
+  //   }  
   // }
-  // try {
-  //   const data = await queryTodos()
-  //   if (data) {
-  //     let arr = []
-  //     for (let item of data) {
-  //       let result = {}
-  //       result.objectId = item.get('objectId')
-  //       result.content = item.get('content')
-  //       result.ACL = item.get('ACL')
-  //       result.createdAt = item.get('createdAt').Format('yyyy-MM-dd hh:mm:ss')
-  //       arr.push(result)
-  //     }
-  //     res.send(arr)
-  //   } else {
-  //     throw new Error('Can not find.')
-  //   }    
-  // }
-  // catch (error) {
-  //   tool.l(error)
-  // }
-  // es6 Promise
+// es6 Promise
+content.getTodos = (req, res) => {
   const queryTodo = () => {
     return new Promise((resolve, reject) => {
       const query = new AV.Query('Todo')
@@ -65,6 +68,26 @@ content.getTodos = async (req, res) => {
       }
       res.send(dataArr)
     }).catch(new Error('Can not find'))
+}
+content.upload = (req, res) => {
+  var form = new multiparty.Form();
+  form.parse(req, function (err, fields, files) {
+    var iconFile = files.iconImage[0];
+    if (iconFile.size !== 0) {
+      fs.readFile(iconFile.path, function (err, data) {
+        if (err) {
+          return res.send('读取文件失败');
+        }
+        var theFile = new AV.File(iconFile.originalFilename, data);
+        theFile.save().then(function (theFile) {
+          res.send('上传成功！');
+        }).catch(console.error);
+      });
+    } else {
+      res.send('请选择一个文件。');
+    }
+  });
+  
 }
 
 // 对Date的扩展，将 Date 转化为指定格式的String
