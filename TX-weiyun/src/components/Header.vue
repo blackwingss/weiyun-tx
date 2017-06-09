@@ -19,8 +19,8 @@
     <div class="w-header__switcher">
       <div class="switcher-list">
         <div class="switcher-view">
-          <span><i class="icon icon-list"></i></span>
-          <span class="current"><i class="icon icon-thum">v</i></span>
+          <span @click="changeListView" :class="{'current': isView}"><i class="icon icon-list"></i></span>
+          <span @click="changeThumView" :class="{'current': !isView}"><i class="icon icon-thum"></i></span>
         </div>
         <div class="switcher-rank">
           <span class="current"><i class="icon icon-ren"></i></span>
@@ -28,18 +28,20 @@
         </div>
       </div>      
     </div>
-    <div class="w-header__addbtn fr" @mouseover="mouseOver" @mouseout="mouseOut">
-      <form enctype="multipart/form-data" method="post" action="http://localhost:3000/api/upload">
-        <input id="_upload_html5_input" name="iconImage" type="file" multiple="multiple" style="display: none;">
-        <input type="submit" name="submit" value="上传">
+    <div class="w-header__addbtn fr">
+      <form enctype="multipart/form-data" method="post" :action="actionUrl">
+        <input type="text" name="currUrl" :value="location" style="display:none">
+        <input id="_upload_html5_input" @change="fileChanged" name="iconImage" type="file" multiple="multiple" style="display: none;">
+        <div class="submitPanel" v-show="showSubmit">
+          <input type="submit" name="submit" value="上传">
+        </div>        
       </form>
-      <div class="addbtn">
+      <div class="addbtn" @mouseover="mouseOver" @mouseout="mouseOut">
         <i class="icon icon-add"></i>
         <span class="addbtn-txt">
           上传文件
         </span>
       </div> 
-      <span>{{msg}}</span>
     </div>
     <transition name="fadeInUp">
     <div class="w-header__upload-panel" v-show="uploadState" @mouseover="mouseOver" @mouseout="mouseOut">
@@ -54,19 +56,18 @@
 </template>
 
 <script>
-import API_ROOT from '../config.js';
+import { API_ROOT } from '../config.js';
 import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
       uploadState: false,
-      searchState: true
+      searchState: true,
+      showSubmit: false,
+      actionUrl: API_ROOT + '/api/upload',
+      location: window.location,
+      isView: false
     }
-  },
-  computed: {
-     ...mapGetters({
-      msg: 'upload_msg'
-    }),
   },
   methods: {
     mouseOver () {
@@ -82,10 +83,16 @@ export default {
       e.target.value = ''        
       this.searchState = true
     },
-    fileChoosed (e) {
-      // console.log(e.target.files[0])
-      // let localPath = e.target.value
-      // this.$store.dispatch('upload', localPath)
+    fileChanged (e) {
+      this.showSubmit = true
+    },
+    changeListView () {
+      this.isView = true
+      this.$store.dispatch('changeListView')
+    },
+    changeThumView () {
+      this.isView = false
+      this.$store.dispatch('changeThumView')
     }
   }
 }
@@ -268,6 +275,21 @@ export default {
     height: 100%;
     margin: 0 40px 0 0;
     z-index: 3;
+    .submitPanel {
+      position: absolute;
+      width: 400px;
+      height: 300px;
+      top: 150px;
+      right: 100px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,.4);
+      input {
+        border: none;
+        outline: none;
+        margin: 0 auto;
+      }
+    }
     .addbtn {
       padding: 0 45px;
       height: 36px;

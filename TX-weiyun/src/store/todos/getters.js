@@ -1,4 +1,6 @@
 export default {
-  getTodos: state => state.todos,
-  upload_msg: state => state.msg
+  getPictures: state => state.pictures,
+  getDocs: state => state.docs,
+  getPdfs: state => state.pdfs,
+  getIsView: state => state.isView
 }

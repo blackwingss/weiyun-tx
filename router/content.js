@@ -43,10 +43,10 @@ let content = {}
   //   }  
   // }
 // es6 Promise
-content.getTodos = (req, res) => {
-  const queryTodo = () => {
+content.getFiles = (req, res) => {
+  const queryFiles = () => {
     return new Promise((resolve, reject) => {
-      const query = new AV.Query('Todo')
+      const query = new AV.Query('_File')
       query.descending('createdAt')
       const data = query.find()
       if (data) {
@@ -56,37 +56,43 @@ content.getTodos = (req, res) => {
       }
     })
   }
-  queryTodo()
+  queryFiles()
     .then(data => {
       let dataArr = []
       for (let item of data) {
         let result = {
           objectId: item.get('objectId'),
-          content: item.get('content')
-        }
+          url: item.get('url'),
+          mime_type: item.get('mime_type'),
+          name: item.get('name'),
+          createdAt: item.get('createdAt')
+        }    
         dataArr.push(result)
       }
       res.send(dataArr)
     }).catch(new Error('Can not find'))
 }
 content.upload = (req, res) => {
-  var form = new multiparty.Form();
+  let form = new multiparty.Form();
   form.parse(req, function (err, fields, files) {
-    var iconFile = files.iconImage[0];
-    if (iconFile.size !== 0) {
-      fs.readFile(iconFile.path, function (err, data) {
-        if (err) {
-          return res.send('读取文件失败');
-        }
-        var theFile = new AV.File(iconFile.originalFilename, data);
-        theFile.save().then(function (theFile) {
-          res.send('上传成功！');
-        }).catch(console.error);
-      });
-    } else {
-      res.send('请选择一个文件。');
-    }
-  });
+    let choosedFiles = files.iconImage;
+    let location = fields.currUrl;
+    for (let file of choosedFiles) {
+      if (file.size !== 0) {
+        fs.readFile(file.path, function (err, data) {
+          if (err) {
+            res.send('读取文件失败');
+          }
+          let theFile = new AV.File(file.originalFilename, data);
+          theFile.save().then(function (thefile) {
+            res.redirect(location)
+          }).catch(console.error);
+        });
+      } else {
+        res.send('请选择一个文件。');
+      }
+    }    
+  })
   
 }
 

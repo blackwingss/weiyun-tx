@@ -1,6 +1,7 @@
 export default {
-  todos: [],
-  errMsg1: '',
-  errMsg2: '',
-  msg: ''
+  pictures: [],
+  docs: [],
+  pdfs: [],
+  isView: true,
+  errmsg: ''
 }

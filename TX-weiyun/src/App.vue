@@ -1,11 +1,9 @@
 <template>
-  <div id="app">
-    <w-Header></w-Header>
-    <div class="container">
+    <div id="app">
+      <w-Header></w-Header>
       <w-Sider></w-Sider>
-      <router-view class="view"></router-view>
-    </div>    
-  </div>
+      <router-view class="router-view"></router-view>   
+    </div>
 </template>
 
 <script>
@@ -22,13 +20,12 @@ export default {
 <style lang="scss">
 @import './assets/css/reset.css';
 #app {
-  overflow-y: hidden;
-  .container {
-    display: -webkit-flex;
-    display: flex;
-    .view {
-      flex: 1;
-    }
+  .router-view {
+    box-sizing: border-box;
+    width: 100%;
+    height: 550px;
+    overflow-y: auto;
+    padding-left: 200px;
   }
 }
 

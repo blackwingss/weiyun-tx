@@ -18,7 +18,7 @@ module.exports = (app) => {
   })
 
   // api
-  app.get('/api/todos', content.getTodos)
+  app.get('/api/files', content.getFiles)
   app.post('/api/upload', content.upload)
 }
 
