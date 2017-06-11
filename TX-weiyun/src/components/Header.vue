@@ -11,7 +11,7 @@
     <div class="w-header__search fl" :class="{'active': !searchState}">
       <i class="icon icon-search"></i>
       <label v-show="searchState">输入文件名</label>
-      <input type="text" id="search" :class="{'active': !searchState}" @focus="focus" @blur="blur">
+      <input type="text" id="search" :class="{'active': !searchState}" @focus="searchState = false" @blur="blur">
       <span class="close" v-show="!searchState">
         <i class="icon icon-close"></i>
       </span>
@@ -28,29 +28,76 @@
         </div>
       </div>      
     </div>
-    <div class="w-header__addbtn fr">
-      <form enctype="multipart/form-data" method="post" :action="actionUrl">
-        <input type="text" name="currUrl" :value="location" style="display:none">
-        <input id="_upload_html5_input" @change="fileChanged" name="iconImage" type="file" multiple="multiple" style="display: none;">
-        <div class="submitPanel" v-show="showSubmit">
-          <input type="submit" name="submit" value="上传">
-        </div>        
+    <div class="w-header__addbtn fr" @mouseenter="showUpload = true" @mouseleave="showUpload = false">
+      <form enctype="multipart/form-data" ref="form">
+        <input type="text" name="currUrl" style="display:none">
+        <input id="_upload_html5_input" ref="fileContainer" @change="showSubmit = true" name="fileInput" type="file" multiple="multiple" style="display: none;">
       </form>
-      <div class="addbtn" @mouseover="mouseOver" @mouseout="mouseOut">
+      <div class="addbtn">
         <i class="icon icon-add"></i>
         <span class="addbtn-txt">
-          上传文件
+          添加
         </span>
       </div> 
     </div>
-    <transition name="fadeInUp">
-    <div class="w-header__upload-panel" v-show="uploadState" @mouseover="mouseOver" @mouseout="mouseOut">
-      <label for="_upload_html5_input">
-          <div class="upload-panel">+</div>
-          <b class="arrow-border"></b>
-          <b class="arrow"></b>
-        </label>
+    <div class="w-header__fullPop" v-show="showSubmit">
+      <div class="fullPop">
+        <button @click="upload">上传</button>
+        <span @click="showSubmit = false">X</span>
+        <p>{{msg}}</p>
+        <h2>{{tips}}</h2>
+        <div :style="{width: oWidth + 'px'}" style="height: 5px;background-color: #f60"></div>
+      </div>
     </div>
+    <transition name="fadeInUp">
+      <div class="w-header__upload-panel" v-show="showUpload" @mouseenter="showUpload = true" @mouseleave="showUpload = false">
+        <ul class="upload_dropdown clearfix">
+          <li class="upload_item">
+            <label for="_upload_html5_input">
+              <div class="inner">
+                <span class="icon icon-upload icon-upload-file"></span>
+                <p class="txt">上传文件</p>
+              </div>          
+            </label>
+          </li>
+          <li class="upload_item">
+            <label for="_upload_html5_input">
+              <div class="inner">
+                <span class="icon icon-upload icon-upload-dir"></span>
+                <p class="txt">上传文件夹</p>
+              </div>          
+            </label>
+          </li>        
+          <li class="upload_item">
+            <label for="_upload_html5_input">
+              <div class="inner">
+                <span class="icon icon-upload icon-offline-download"></span>
+                <p class="txt">离线下载</p>
+              </div>          
+            </label>
+          </li>
+          <li class="upload_item">
+            <label for="_upload_html5_input">
+              <div class="inner">
+                <span class="icon icon-upload icon-create-dir"></span>
+                <p class="txt">创建文件夹</p>
+              </div>          
+            </label>
+          </li>
+          <li class="upload_item">
+            <label for="_upload_html5_input">
+              <div class="inner">
+                <span class="icon icon-upload icon-add-note"></span>
+                <p class="txt">添加笔记</p>
+              </div>          
+            </label>
+          </li>
+        </ul>   
+        <div class="trangle">
+          <span class="arrow-border"></span>
+          <span class="arrow"></span>
+        </div>      
+      </div>
     </transition>
   </div>
 </template>
@@ -61,30 +108,31 @@ import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
-      uploadState: false,
+      showUpload: false,
       searchState: true,
       showSubmit: false,
-      actionUrl: API_ROOT + '/api/upload',
-      location: window.location,
-      isView: false
+      isView: false,
+      oWidth: 1,
+      timer: null,
+      tips: ''
+    }
+  },
+  computed: {
+    ...mapGetters({
+      msg: 'getUploadMsg'
+    })
+  },
+  watch: {
+    msg: function() {
+      clearInterval(this.timer)
+      this.oWidth = 1
+      this.$store.dispatch('get_files')
     }
   },
   methods: {
-    mouseOver () {
-      this.uploadState = true   
-    },
-    mouseOut () {
-      this.uploadState = false
-    },
-    focus () {
-      this.searchState = false
-    },
     blur (e) {
-      e.target.value = ''        
+      e.target.value = ''   
       this.searchState = true
-    },
-    fileChanged (e) {
-      this.showSubmit = true
     },
     changeListView () {
       this.isView = true
@@ -93,6 +141,21 @@ export default {
     changeThumView () {
       this.isView = false
       this.$store.dispatch('changeThumView')
+    },
+    upload () {  
+      if (this.$refs.fileContainer.value !== '') {
+        this.uploading()
+        let formData = new FormData(this.$refs.form)
+        this.$store.dispatch('upload_file', formData)
+        this.$refs.fileContainer.value = ''
+      } else {
+        this.tips = '请选择文件'
+      }             
+    },
+    uploading () {
+      this.timer = setInterval(() => {
+        this.oWidth++
+      }, 100)
     }
   }
 }
@@ -213,11 +276,8 @@ export default {
     }
   }
   .w-header__switcher {
-    position: absolute;
-    left: 237px;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    float: left;
+    margin-left: 224px;
     text-align: center;   
     .switcher-list {
       display: inline-block;
@@ -271,7 +331,6 @@ export default {
   .w-header__addbtn {
     position: relative;
     float: right;
-    padding: 12px 0;
     height: 100%;
     margin: 0 40px 0 0;
     z-index: 3;
@@ -293,6 +352,7 @@ export default {
     .addbtn {
       padding: 0 45px;
       height: 36px;
+      margin-top: 12px;
       line-height: 36px;
       -webkit-border-radius: 20px;
       -moz-border-radius: 20px;
@@ -335,30 +395,73 @@ export default {
     border: 1px solid #c8ccd3;
     box-shadow: 0 1px 4px 0 rgba(15,32,65,.2);
     width: 320px;
-    height: 100px;
-    opacity: 1;
     &.fadeInUp-enter,&.fadeIn-leave-active {
-      opacity: 0;
       transform: translateY(-5px);
     }
     &.fadeInUp-enter-active,&.fadeIn-leave-active {
-      -webkit-transition: all .3s;
-      -moz-transition: all .3s;
-      transition: all .3s;
+      -webkit-transition: transform .3s;
+      -moz-transition: transform .3s;
+      transition: transform .3s;
     }
-    .upload-panel {
-      width: 50px;
-      height: 50px;
-      margin: 10px 0 0 10px;
-      border: 1px dotted #333;
-      line-height: 45px;
-      text-align: center;
-      font-size: 40px;
-      cursor: pointer;
-      &:hover {
-        background-color: rgba(0,0,0,.2);
+    /*下拉框*/
+    .upload_dropdown {
+      .upload_item {
+        float: left;
+        width: 33.33333%;
+        box-sizing: border-box;
+        padding: 29px 0 20px;
+        cursor: pointer;
+        &:hover {
+          background-color: rgba(59,147,255,.06);
+          .icon-upload-file {
+            background-position: -428px -251px;
+          }
+          .icon-upload-dir {
+            background-position: -247px -192px;
+          }
+          .icon-offline-download {
+            background-position: -275px -251px;
+          }
+          .icon-create-dir {
+            background-position: -173px -251px;
+          }
+          .icon-add-note {
+            background-position: -224px -251px;
+          }
+        }
+        .inner {
+          text-align: center;
+          font-size: 14px;
+          color: #000;
+          cursor: pointer;
+          .icon-upload {
+            width: 50px;
+            height: 50px;
+            background-image: url(https://qzonestyle.gtimg.cn/qz-proj/wy-pc/css/sprite/page-home-delay-170602173531.png);
+            background-repeat: no-repeat;
+          }
+          .icon-upload-file {
+            background-position: -349px -192px;
+          }
+          .icon-upload-dir {
+            background-position: -122px -251px;
+          }
+          .icon-offline-download {
+            background-position: -298px -192px;
+          }
+          .icon-create-dir {
+            background-position: -326px -251px;
+          }
+          .icon-add-note {
+            background-position: -377px -251px;
+          }
+          .txt {
+            margin-top: 13px;
+          }
+        }
       }
     }
+    /*三角*/
     .arrow-border, .arrow{
       position: absolute;
       width: 0;
@@ -378,5 +481,25 @@ export default {
       border-bottom-color: #fff;
     }
   }
+  .w-header__fullPop {
+    position: fixed;
+    width: 100%;
+    height: 1000px;
+    left: 0;
+    top: 0;
+    background-color: rgba(255,255,255,.65);
+    z-index: 1000;
+    .fullPop {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 450px;
+      height: 320px;
+      background-color: #fff;
+      box-shadow: 0 0 12px rgba(15,32,65,.2);
+      margin-left: -226px;
+      margin-top: -159px;
+    }
+  }  
 }
 </style>

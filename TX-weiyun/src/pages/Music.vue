@@ -1,16 +1,38 @@
 <template>
-  <div id="all">
-    music
+  <div>
+    <div id="all">
+      <div class="all-view">
+        <div class="musics_content clearfix">
+          <h2>音乐({{musics.length}}首)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in musics" class="list_view">
+                <audio :src="item.url" controls></audio>
+                <p >{{item.name}}</p>
+                <a :href="item.url" class="rightBtn" target="_blank">下载</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
-
+  computed: {
+    ...mapGetters({
+      musics: 'getMusics',
+      isView: 'getIsView'
+    })
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

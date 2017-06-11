@@ -1,7 +1,12 @@
 export default {
-  pictures: [],
-  docs: [],
-  pdfs: [],
+  files: {
+    pictures: [],    
+    musics: [],
+    pdfs: [],
+    videos: [],
+    others: []
+  },  
   isView: true,
-  errmsg: ''
+  errmsg: '',
+  upload_msg: []
 }

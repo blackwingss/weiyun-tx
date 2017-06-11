@@ -1,87 +1,93 @@
 <template>
   <div>
     <div id="all">
-      <div class="thum-view" v-show="isView">
-        <ul>
-          <li v-for="item in results">
-            <img :src="item.url" alt="">         
-          </li>    
-        </ul>
-      </div>
-      <div class="list-view" v-show="!isView">
-        <ul>
-          <li v-for="item in results">
-            <img :src="item.url" alt="">
-            <p>{{item.name}}</p>
-          </li>
-        </ul>
+      <div class="all-view">
+        <div class="pics_content clearfix">
+          <h2>图片({{pictures.length}}张)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in pictures" :class="isView ? 'thum_view' : 'list_view'">
+                <img :src="item.url">                
+                <p v-show="!isView">{{item.name}}</p>
+                <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">查看大图</a>
+              </li>
+            </ul>
+          </div>
+        </div> 
+        <div class="videos_content clearfix">
+          <h2>视频({{videos.length}}部)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in videos" :class="isView ? 'thum_view' : 'list_view'">
+                <video v-show="isView" :src="item.url"></video>
+                <p v-show="!isView">{{item.name}}</p>
+                <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">播放</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="musics_content clearfix">
+          <h2>音乐({{musics.length}}首)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in musics" class="list_view">
+                <audio :src="item.url" controls></audio>
+                <p >{{item.name}}</p>
+                <a :href="item.url" class="rightBtn" target="_blank">下载</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="docs_content clearfix">
+          <h2>文档({{pdfs.length}}份)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in pdfs" class="list_view">
+                <p><a :href="item.url" target="_blank">{{item.name}}</a></p>
+                <a :href="item.url" class="rightBtn" target="_blank">查看</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="others_content clearfix">
+          <h2>其他({{others.length}}份)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in others" class="list_view">
+                <p><a :href="item.url" target="_blank">{{item.name}}</a></p>
+                <a :href="item.url" class="rightBtn" target="_blank">查看</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      results: 'getPictures',
+      pictures: 'getPictures',
+      musics: 'getMusics',
+      videos: 'getVideos',
+      pdfs: 'getPdfs',
+      others: 'getOthers',
+
       isView: 'getIsView'
     })
-  },
-  mounted () {
-    this.$store.dispatch('get_files')
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-#all {
-  .thum-view {
-    padding: 10px 30px;
-    list-style: none;
-    li {
-      float: left;
-      width: 200px;
-      height: 300px;
-      margin: 8px;
-      img {
-        width: 100%;
-        height: 100%;
-      } 
-    }
-  }
-  .list-view {
-    padding: 10px 30px;
-    /*list-style-type: decimal;*/
-    li {
-      width: 100%;
-      text-align: left;
-      margin: 10px 0;
-      padding: 10px 0;
-      line-height: 10px;     
-      background-color: #f2f2f2;
-      color: #000;
-      img {
-        vertical-align: top;
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        display: inline-block;
-      }
-      p{
-        vertical-align: top;
-        height: 30px;
-        line-height: 30px;
-        margin-left: 10px;
-        display: inline-block;
-      }
-      &:hover {
-        background-color: #999;
-      }
-    }
-  }
-}
 
 </style>

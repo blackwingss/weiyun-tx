@@ -48,52 +48,50 @@ content.getFiles = (req, res) => {
     return new Promise((resolve, reject) => {
       const query = new AV.Query('_File')
       query.descending('createdAt')
-      const data = query.find()
-      if (data) {
-        resolve(data)
+      const files = query.find()
+      if (files) {
+        resolve(files)
       } else {
         reject()
       }
     })
   }
   queryFiles()
-    .then(data => {
-      let dataArr = []
-      for (let item of data) {
-        let result = {
-          objectId: item.get('objectId'),
-          url: item.get('url'),
-          mime_type: item.get('mime_type'),
-          name: item.get('name'),
-          createdAt: item.get('createdAt')
+    .then(files => {
+      let filesArr = []
+      for (let file of files) {
+        let fileObj = {
+          objectId: file.get('objectId'),
+          url: file.get('url'),
+          mime_type: file.get('mime_type'),
+          name: file.get('name'),
+          createdAt: file.get('createdAt')
         }    
-        dataArr.push(result)
+        filesArr.push(fileObj)
       }
-      res.send(dataArr)
+      res.send(filesArr)
     }).catch(new Error('Can not find'))
 }
-content.upload = (req, res) => {
+content.uploadFiles = (req, res) => {
   let form = new multiparty.Form();
-  form.parse(req, function (err, fields, files) {
-    let choosedFiles = files.iconImage;
-    let location = fields.currUrl;
-    for (let file of choosedFiles) {
-      if (file.size !== 0) {
-        fs.readFile(file.path, function (err, data) {
+  form.parse(req,  (err, fields, files) => {
+    let allFiles = files.fileInput;
+    for (let file of allFiles) {
+      if (file.size !== 0) {  
+        fs.readFile(file.path,  (err, data) => {
           if (err) {
             res.send('读取文件失败');
           }
           let theFile = new AV.File(file.originalFilename, data);
-          theFile.save().then(function (thefile) {
-            res.redirect(location)
+          theFile.save().then((thefile) => {
+            res.send('上传成功')
           }).catch(console.error);
         });
       } else {
         res.send('请选择一个文件。');
       }
     }    
-  })
-  
+  })  
 }
 
 // 对Date的扩展，将 Date 转化为指定格式的String

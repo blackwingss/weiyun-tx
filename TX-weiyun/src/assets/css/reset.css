@@ -13,6 +13,11 @@ a {
   color: inherit;
   text-decoration: none;
 }
+.clearfix {
+  display: block;
+  content: '';
+  clear: both;
+}
 .fl {
   float: left;
 }
@@ -22,6 +27,9 @@ a {
 i {
   font-style: normal;
   font-weight: 400;
+}
+ul, li {
+  list-style: none;
 }
 .icon {
   position: relative;

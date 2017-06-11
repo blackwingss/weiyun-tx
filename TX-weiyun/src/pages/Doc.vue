@@ -1,42 +1,37 @@
 <template>
   <div>
-    <div id="doc">
-      <ul>
-        <li v-for="item in results">
-          <a :href="item.url">{{item.name}}</a>
-        </li>
-      </ul>
+    <div id="all">
+      <div class="all-view">
+        <div class="docs_content clearfix">
+          <h2>文档({{pdfs.length}}份)</h2>
+          <div class="divider"></div>
+          <div class="content">
+            <ul>
+              <li v-for="item in pdfs" class="list_view">
+                <p><a :href="item.url" target="_blank">{{item.name}}</a></p>
+                <a :href="item.url" class="rightBtn" target="_blank">查看</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      results: 'getPdfs'
+      pdfs: 'getPdfs',
+      isView: 'getIsView'
     })
-  },
-  mounted () {
-    this.$store.dispatch('get_files')
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-#doc {
-  padding: 30px;
-  ul {
-    list-style: none;
-    li{
-      width: 100%;
-      height: 50px;
-      text-align: center;
-      line-height: 50px;
-      background-color: #ccc;
-    }
-  }
-}
+
 </style>
