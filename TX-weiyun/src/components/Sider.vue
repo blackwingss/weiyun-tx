@@ -7,13 +7,7 @@
     </div>
     <div class="w-sider__options">
       <ul class="options" @click="swtichRouter">
-        <li class="option" :class="location === 'recent' ? 'active' : ''">
-          <router-link to="/recent">     
-            <i class="icon icon-ren"></i>
-            <span class="option-text">最近</span>
-          </router-link>
-        </li>
-        <li class="title">文件</li>
+        <!--<li class="title">文件</li>-->
         <li class="option" :class="location === '' ? 'active' : ''">
           <router-link to="/">
             <i class="icon icon-all"></i>
@@ -41,7 +35,7 @@
         <li class="option" :class="location === 'note' ? 'active' : ''">
           <router-link to="/note">
             <i class="icon icon-note"></i>
-            <span class="option-text">笔记</span>
+            <span class="option-text">其他</span>
           </router-link>
         </li>
         <li class="option" :class="location === 'music' ? 'active' : ''">
@@ -50,7 +44,7 @@
             <span class="option-text">音乐</span>
           </router-link>
         </li>
-        <li class="title">照片</li>
+        <!--<li class="title">照片</li>
         <li class="option" :class="location === 'time' ? 'active' : ''">
           <router-link to="/time">
             <i class="icon icon-time"></i>
@@ -70,12 +64,12 @@
             <span class="option-text">分享链接</span>
           </router-link>
         </li>
-        <li class="option" :class="location === 'trash' ? 'active' : ''">
-          <router-link to="/trash">
+        <li class="option" :class="location === 'trash' ? 'active' : ''">-->
+          <!--<router-link to="/trash">
             <i class="icon icon-trash"></i>
             <span class="option-text">回收站</span>
           </router-link>
-        </li>
+        </li>-->
       </ul>
     </div>
   </div>

@@ -8,7 +8,7 @@ const content = require('./content')
 module.exports = (app) => {
   // 访问路由
   app.get('/', (req, res) => {
-    res.render('index')
+    res.render('weiyun')
   })
   app.get('/weiyun', (req, res) => {
     res.render('weiyun')

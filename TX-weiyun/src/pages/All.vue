@@ -3,12 +3,12 @@
     <div id="all">
       <div class="all-view">
         <div class="pics_content clearfix">
-          <h2>图片({{pictures.length}})</h2>
+          <h2>图片({{pictures.length}}) ---^_^----<slot style="padding-left: 10px">友情提示，不要上传大文件哦</slot></h2>
           <div class="divider"></div>
-          <div class="content">
+          <div class="content">            
             <ul>
               <li v-for="item in pictures" :class="isView ? 'thum_view' : 'list_view'">
-                <img :src="item.url">                
+                <img :src="item.url">                                
                 <p v-show="!isView">{{item.name}}</p>
                 <p class="createdAt" v-show="!isView">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
                 <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">查看大图</a>

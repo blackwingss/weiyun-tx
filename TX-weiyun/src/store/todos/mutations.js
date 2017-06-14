@@ -29,7 +29,9 @@ export default {
               pdfs.push(item)
               state.files.pdfs = pdfs
               break;
-            default:              
+            default:   
+              others.push(item)
+              state.files.others = others
               break;
           }
           break;      

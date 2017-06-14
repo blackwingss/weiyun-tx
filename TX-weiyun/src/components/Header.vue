@@ -24,10 +24,10 @@
           <span @click="changeListView" :class="{'current': isView}"><i class="icon icon-list"></i></span>
           <span @click="changeThumView" :class="{'current': !isView}"><i class="icon icon-thum"></i></span>
         </div>
-        <div class="switcher-rank">
+        <!--<div class="switcher-rank">
           <span class="current"><i class="icon icon-ren"></i></span>
-          <span><i class="icon icon-letter"></i></span>
-        </div>
+          <span><i class="icon icon-letter"></i></span>-->
+        <!--</div>-->
       </div>      
     </div>
     <div class="w-header__addbtn fr" @mouseenter="showUploadBtn = true" @mouseleave="showUploadBtn = false">
