@@ -25,14 +25,9 @@ export default {
     'w-Sider': Sider,
     'w-Upload': Upload
   },
-  watch: {
-    allFiles: function() {
-      this.$store.dispatch('get_files')
-    }
-  },
   mounted () {
     this.$store.dispatch('get_files')
-  } 
+  }  
 }
 </script>
 

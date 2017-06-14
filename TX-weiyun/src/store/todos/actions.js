@@ -20,14 +20,24 @@ export default {
     commit(types.CHANGE_THUM_VIEW)
   },
   upload_file ({ commit }, formData) {
-    axios.post(API_ROOT + '/api/uploadFiles', formData)
-      .then(res => {
-        commit(types.UPLOAD_FILE_SUCCESS, res.data)
-      }, err => {
-        commit(types.UPLOAD_FILE_FAIL, err)
-      })
+    return new Promise((resolve, reject) => {
+      axios.post(API_ROOT + '/api/uploadFiles', formData)
+        .then(res => {
+          resolve('上传成功')
+          commit(types.UPLOAD_FILE_SUCCESS, res.data)
+        }, err => {
+          resolve('上传失败')
+          commit(types.UPLOAD_FILE_FAIL, err)
+        })
+    })    
   },
   hd_sw_UploadPanel ({ commit }) {
     commit(types.HD_SW_UPLOAD_PANEL)
+  },
+  resetUploadMsg ({ commit }) {
+    commit(types.RESET_UPLOAD_MSG)
+  },
+  transformTask ({ commit }, { taskCount, hasTask }) {
+    commit(types.TRANSFORM_TASK, { taskCount, hasTask })
   }
 } 

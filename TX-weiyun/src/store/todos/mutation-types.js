@@ -9,3 +9,6 @@ export const UPLOAD_FILE_FAIL = 'upload_file_fail'
 
 export const HD_SW_UPLOAD_PANEL = 'hd_sw_upload_panel'
 
+export const RESET_UPLOAD_MSG = 'reset_upload_msg'
+export const TRANSFORM_TASK = 'transform_task'
+

@@ -7,6 +7,8 @@
     </h1>
     <div class="w-header__taskbtn fl">
       <i class="icon icon-task"></i>
+      <i v-show="taskState.hasTask" class="taskCount">{{taskState.taskCount}}</i>
+      <!--<span :style="owidth" style="display: block;width:1px;height:4px;background:#f60"></span>-->
     </div>
     <div class="w-header__search fl" :class="{'active': !searchState}">
       <i class="icon icon-search"></i>
@@ -80,15 +82,20 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data () {
     return {
       showUploadBtn: false,
       searchState: true,
-      isView: false
+      isView: false         
     }
-  },  
+  }, 
+  computed: {
+    ...mapGetters({
+      taskState: 'getTaskState'
+    })
+  }, 
   methods: {
     blur (e) {
       e.target.value = ''   
@@ -140,6 +147,13 @@ export default {
     border: 1px solid #D5D7DF;
     text-align: center;
     background: #fff;
+    cursor: pointer;
+    &:hover {
+      border-color: #3B93FF;
+      .icon-task {
+        background-position: -500px -912px; 
+      }
+    }
     .icon-task {
       background-position: -525px -912px; 
       width: 24px;
@@ -147,7 +161,22 @@ export default {
       left: 50%;
       top: 50%;
       position: absolute!important;
-      margin: -12px 0 0 -12px;
+      margin: -12px 0 0 -12px;      
+    }
+    .taskCount {
+      position: absolute;
+      right: -2px;
+      top: -5px;
+      width: 12px;
+      height: 12px;
+      background-color: red;
+      font-size: 12px;
+      line-height: 12px;
+      text-align: center;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      color: #fff;
     }
   }
   .w-header__search {

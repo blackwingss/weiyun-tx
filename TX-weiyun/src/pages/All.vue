@@ -8,8 +8,8 @@
           <div class="content">
             <ul>
               <li v-for="item in pictures" :class="isView ? 'thum_view' : 'list_view'">
-                <!--<img :src="item.url">                -->
-                <p v-show="isView">{{item.name}}</p>
+                <img :src="item.url">                
+                <p v-show="!isView">{{item.name}}</p>
                 <p class="createdAt" v-show="!isView">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
                 <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">查看大图</a>
               </li>
@@ -22,8 +22,8 @@
           <div class="content">
             <ul>
               <li v-for="item in videos" :class="isView ? 'thum_view' : 'list_view'">
-                <!--<video v-show="isView" :src="item.url"></video>-->
-                <p v-show="isView">{{item.name}}</p>
+                <video v-show="isView" :src="item.url"></video>
+                <p v-show="!isView">{{item.name}}</p>
                 <p class="createdAt" v-show="!isView">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
                 <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">播放</a>
               </li>
@@ -36,7 +36,7 @@
           <div class="content">
             <ul>
               <li v-for="item in musics" class="list_view">
-                <!--<audio :src="item.url" controls></audio>-->
+                <audio :src="item.url" controls></audio>
                 <p>{{item.name}}</p>
                 <p class="createdAt">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
                 <a :href="item.url" class="rightBtn" target="_blank">下载</a>

@@ -18,7 +18,7 @@
             <div @click="delLocalfiles(file)" class="cover">删除</div>
           </li>
         </ul>
-        <div class="tips" v-show="localFiles.length == 0">请选择文件</div>
+        <div class="tips" :class="{'active': isActive}" v-show="localFiles.length == 0">请选择文件</div>
       </div>
       <div class="btn-group clearfix"> 
         <span class="count">已选({{localFiles.length}})</span>          
@@ -36,12 +36,14 @@ import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   data () {
     return {      
-      localFiles: []
+      localFiles: [],
+      isActive: false
     }
   },
   computed: {
     ...mapGetters({
-      B_upload_panel: 'getB_upload_panel'
+      B_upload_panel: 'getB_upload_panel',
+      UploadMsg: 'getUploadMsg'
     })
   },
   methods: {
@@ -69,15 +71,38 @@ export default {
       let idx = this.localFiles.indexOf(file)
       this.localFiles.splice(idx, 1)
     },
-    onSubmit () {  
-      this.hd_UploadPanel()
-      if (this.localFiles !== []) {
+    onSubmit () {          
+      if (this.localFiles.length !== 0) {           
+        this.$store.dispatch('transformTask', { taskCount: this.localFiles.length, hasTask: true })     
+        this.hd_UploadPanel()
+        this.upload()
+          .then(() => {
+            this.$store.dispatch('transformTask', { taskCount: this.localFiles.length, hasTask: false })           
+            this.$refs.fileContainer.value = ''
+            this.localFiles = []  
+            this.$store.dispatch('get_files')
+            this.$store.dispatch('resetUploadMsg')            
+          })       
+      } else {
+        this.isActive = true
+      }
+      setTimeout(() => {
+        this.isActive = false
+      },300)      
+    },
+    upload () {
+      return new Promise((resolve, reject) => {
         let formData = new FormData(this.$refs.form)
         this.$store.dispatch('upload_file', formData)
-        this.$refs.fileContainer.value = ''
-        this.localFiles = []        
-      }      
-    }        
+          .then((msg) => {
+            if (this.UploadMsg == msg) {
+              resolve()           
+            } else {
+              reject()
+            }
+        })        
+      })      
+    }     
   }
 }
 </script>
@@ -158,6 +183,45 @@ export default {
           text-align: center;
           width: 100%;
           margin-top: 50px;
+        }
+        .active {
+          animation: bounce .3s;
+          transform: translateX(0px);
+        }
+        @keyframes bounce {
+          0% {
+            transform: translateX(0)
+          }
+          10% {
+            transform: translateX(-10px)
+          }
+          20% {
+            transform: translateX(-20px)
+          }
+          30% {
+            transform: translateX(-20px)
+          }
+          40% {
+            transform: translateX(-10px)
+          }
+          50% {
+            transform: translateX(0)
+          }
+          60% {
+            transform: translateX(10px)
+          }
+          70% {
+            transform: translateX(20px)
+          }
+          80% {
+            transform: translateX(20px)
+          }
+          90% {
+            transform: translateX(10px)
+          }
+          100% {
+            transform: translateX(0)
+          }
         }
       }
       .chooseFile {

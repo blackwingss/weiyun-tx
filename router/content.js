@@ -85,7 +85,7 @@ content.uploadFiles = (req, res) => {
           let theFile = new AV.File(file.originalFilename, data);
           theFile.save().then((thefile) => {
             res.send('上传成功')
-          }).catch(console.error);
+          }).catch('服务器崩了');
         });
       } else {
         res.send('请选择一个文件。');

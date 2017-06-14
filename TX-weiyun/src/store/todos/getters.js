@@ -16,5 +16,7 @@ export default {
   getIsView: state => state.isView,
   getUploadMsg: state => state.upload_msg,
 
-  getB_upload_panel: state => state.B_upload_panel
+  getB_upload_panel: state => state.B_upload_panel,
+
+  getTaskState: state => state.taskState
 }
