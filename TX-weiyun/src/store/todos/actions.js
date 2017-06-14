@@ -26,5 +26,8 @@ export default {
       }, err => {
         commit(types.UPLOAD_FILE_FAIL, err)
       })
+  },
+  hd_sw_UploadPanel ({ commit }) {
+    commit(types.HD_SW_UPLOAD_PANEL)
   }
 } 

@@ -1,5 +1,6 @@
 export default {
   files: {
+    allFiles: [],
     pictures: [],    
     musics: [],
     pdfs: [],
@@ -8,5 +9,6 @@ export default {
   },  
   isView: true,
   errmsg: '',
-  upload_msg: []
+  upload_msg: [],
+  B_upload_panel: false
 }

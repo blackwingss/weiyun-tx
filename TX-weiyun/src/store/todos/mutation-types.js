@@ -7,3 +7,5 @@ export const CHANGE_THUM_VIEW = 'change_thum_view'
 export const UPLOAD_FILE_SUCCESS = 'upload_file_success'
 export const UPLOAD_FILE_FAIL = 'upload_file_fail'
 
+export const HD_SW_UPLOAD_PANEL = 'hd_sw_upload_panel'
+

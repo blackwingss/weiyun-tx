@@ -28,69 +28,46 @@
         </div>
       </div>      
     </div>
-    <div class="w-header__addbtn fr" @mouseenter="showUpload = true" @mouseleave="showUpload = false">
-      <form enctype="multipart/form-data" ref="form">
-        <input type="text" name="currUrl" style="display:none">
-        <input id="_upload_html5_input" ref="fileContainer" @change="showSubmit = true" name="fileInput" type="file" multiple="multiple" style="display: none;">
-      </form>
+    <div class="w-header__addbtn fr" @mouseenter="showUploadBtn = true" @mouseleave="showUploadBtn = false">
       <div class="addbtn">
         <i class="icon icon-add"></i>
         <span class="addbtn-txt">
           添加
         </span>
       </div> 
-    </div>
-    <div class="w-header__fullPop" v-show="showSubmit">
-      <div class="fullPop">
-        <button @click="upload">上传</button>
-        <span @click="showSubmit = false">X</span>
-        <p>{{msg}}</p>
-        <h2>{{tips}}</h2>
-        <div :style="{width: oWidth + 'px'}" style="height: 5px;background-color: #f60"></div>
-      </div>
-    </div>
+    </div>    
     <transition name="fadeInUp">
-      <div class="w-header__upload-panel" v-show="showUpload" @mouseenter="showUpload = true" @mouseleave="showUpload = false">
+      <div class="w-header__upload-panel" v-show="showUploadBtn" @mouseenter="showUploadBtn = true" @mouseleave="showUploadBtn = false">
         <ul class="upload_dropdown clearfix">
-          <li class="upload_item">
-            <label for="_upload_html5_input">
-              <div class="inner">
-                <span class="icon icon-upload icon-upload-file"></span>
-                <p class="txt">上传文件</p>
-              </div>          
-            </label>
+          <li class="upload_item" @click="sw_UploadPanel">
+            <div class="inner">
+              <span class="icon icon-upload icon-upload-file"></span>
+              <p class="txt">上传文件</p>
+            </div>          
           </li>
           <li class="upload_item">
-            <label for="_upload_html5_input">
-              <div class="inner">
-                <span class="icon icon-upload icon-upload-dir"></span>
-                <p class="txt">上传文件夹</p>
-              </div>          
-            </label>
+            <div class="inner">
+              <span class="icon icon-upload icon-upload-dir"></span>
+              <p class="txt">上传文件夹</p>
+            </div>          
           </li>        
           <li class="upload_item">
-            <label for="_upload_html5_input">
-              <div class="inner">
-                <span class="icon icon-upload icon-offline-download"></span>
-                <p class="txt">离线下载</p>
-              </div>          
-            </label>
+            <div class="inner">
+              <span class="icon icon-upload icon-offline-download"></span>
+              <p class="txt">离线下载</p>
+            </div>          
           </li>
           <li class="upload_item">
-            <label for="_upload_html5_input">
-              <div class="inner">
-                <span class="icon icon-upload icon-create-dir"></span>
-                <p class="txt">创建文件夹</p>
-              </div>          
-            </label>
+            <div class="inner">
+              <span class="icon icon-upload icon-create-dir"></span>
+              <p class="txt">创建文件夹</p>
+            </div>          
           </li>
           <li class="upload_item">
-            <label for="_upload_html5_input">
-              <div class="inner">
-                <span class="icon icon-upload icon-add-note"></span>
-                <p class="txt">添加笔记</p>
-              </div>          
-            </label>
+            <div class="inner">
+              <span class="icon icon-upload icon-add-note"></span>
+              <p class="txt">添加笔记</p>
+            </div>          
           </li>
         </ul>   
         <div class="trangle">
@@ -103,32 +80,15 @@
 </template>
 
 <script>
-import { API_ROOT } from '../config.js';
-import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 export default {
   data () {
     return {
-      showUpload: false,
+      showUploadBtn: false,
       searchState: true,
-      showSubmit: false,
-      isView: false,
-      oWidth: 1,
-      timer: null,
-      tips: ''
+      isView: false
     }
-  },
-  computed: {
-    ...mapGetters({
-      msg: 'getUploadMsg'
-    })
-  },
-  watch: {
-    msg: function() {
-      clearInterval(this.timer)
-      this.oWidth = 1
-      this.$store.dispatch('get_files')
-    }
-  },
+  },  
   methods: {
     blur (e) {
       e.target.value = ''   
@@ -142,21 +102,9 @@ export default {
       this.isView = false
       this.$store.dispatch('changeThumView')
     },
-    upload () {  
-      if (this.$refs.fileContainer.value !== '') {
-        this.uploading()
-        let formData = new FormData(this.$refs.form)
-        this.$store.dispatch('upload_file', formData)
-        this.$refs.fileContainer.value = ''
-      } else {
-        this.tips = '请选择文件'
-      }             
-    },
-    uploading () {
-      this.timer = setInterval(() => {
-        this.oWidth++
-      }, 100)
-    }
+    ...mapActions({
+      sw_UploadPanel: 'hd_sw_UploadPanel'
+    })
   }
 }
 </script>
@@ -276,8 +224,8 @@ export default {
     }
   }
   .w-header__switcher {
-    float: left;
-    margin-left: 224px;
+    position: absolute;
+    left: 683px;
     text-align: center;   
     .switcher-list {
       display: inline-block;
@@ -479,26 +427,6 @@ export default {
       border-width: 8px 7px;
       margin-left: 1px;
       border-bottom-color: #fff;
-    }
-  }
-  .w-header__fullPop {
-    position: fixed;
-    width: 100%;
-    height: 1000px;
-    left: 0;
-    top: 0;
-    background-color: rgba(255,255,255,.65);
-    z-index: 1000;
-    .fullPop {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      width: 450px;
-      height: 320px;
-      background-color: #fff;
-      box-shadow: 0 0 12px rgba(15,32,65,.2);
-      margin-left: -226px;
-      margin-top: -159px;
     }
   }  
 }

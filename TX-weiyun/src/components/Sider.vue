@@ -6,71 +6,71 @@
       </span>
     </div>
     <div class="w-sider__options">
-      <ul class="options" ref="ul">
-        <li class="option">
+      <ul class="options" @click="swtichRouter">
+        <li class="option" :class="location === 'recent' ? 'active' : ''">
           <router-link to="/recent">     
             <i class="icon icon-ren"></i>
             <span class="option-text">最近</span>
           </router-link>
         </li>
         <li class="title">文件</li>
-        <li class="option active">
+        <li class="option" :class="location === '' ? 'active' : ''">
           <router-link to="/">
             <i class="icon icon-all"></i>
             <span class="option-text">全部</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'doc' ? 'active' : ''">
           <router-link to="/doc">
             <i class="icon icon-doc"></i>
             <span class="option-text">文档</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'pic' ? 'active' : ''">
           <router-link to="/pic">
             <i class="icon icon-pic"></i>
             <span class="option-text">图片</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'video' ? 'active' : ''">
           <router-link to="/video">
             <i class="icon icon-video"></i>
             <span class="option-text">视频</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'note' ? 'active' : ''">
           <router-link to="/note">
             <i class="icon icon-note"></i>
             <span class="option-text">笔记</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'music' ? 'active' : ''">
           <router-link to="/music">
             <i class="icon icon-music"></i>
             <span class="option-text">音乐</span>
           </router-link>
         </li>
         <li class="title">照片</li>
-        <li class="option">
+        <li class="option" :class="location === 'time' ? 'active' : ''">
           <router-link to="/time">
             <i class="icon icon-time"></i>
             <span class="option-text">时间</span>
           </router-link>
         </li>
         <li class="title">我的</li>
-        <li class="option">
+        <li class="option" :class="location === 'safebox' ? 'active' : ''">
           <router-link to="/safebox">
             <i class="icon icon-add-safebox"></i>
             <span class="option-text">保险箱</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'share' ? 'active' : ''">
           <router-link to="/share">
             <i class="icon icon-share"></i>
             <span class="option-text">分享链接</span>
           </router-link>
         </li>
-        <li class="option">
+        <li class="option" :class="location === 'trash' ? 'active' : ''">
           <router-link to="/trash">
             <i class="icon icon-trash"></i>
             <span class="option-text">回收站</span>
@@ -83,20 +83,15 @@
 
 <script>
 export default {
-  mounted () {
-    let items = Array.from(this.$refs.ul.childNodes)
-    items.map(item => {
-      if (/option/.test(item.className)) {
-        item.addEventListener('click', function() {
-          items.forEach(item => {
-            if(/option/.test(item.className)){
-              item.className = 'option'
-            }            
-          })
-          this.className += ' active'
-        })
-      }
-    })
+  data () {
+    return {
+      location: window.location.hash.split('/')[1]
+    }
+  },
+  methods: {
+    swtichRouter () {
+      this.location = window.location.hash.split('/')[1]
+    }
   }
 }
 </script>

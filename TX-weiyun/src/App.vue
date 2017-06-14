@@ -4,23 +4,35 @@
       <w-Sider></w-Sider>
       <transition name="transfrom">
         <router-view class="router-view"></router-view>
-      </transition>   
+      </transition>      
+      <w-Upload class="w-upload"></w-Upload>
     </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue';
 import Sider from '@/components/Sider.vue';
+import Upload from '@/components/Upload.vue';
+import { mapGetters } from 'vuex';
 export default {
-  mounted () {
-    setTimeout(() => {
-      this.$store.dispatch('get_files')
-    },3000)     
+  computed: {
+    ...mapGetters({
+      allFiles: 'getAllFiles'
+    })
   },
   components: {
     'w-Header': Header,
-    'w-Sider': Sider
-  }  
+    'w-Sider': Sider,
+    'w-Upload': Upload
+  },
+  watch: {
+    allFiles: function() {
+      this.$store.dispatch('get_files')
+    }
+  },
+  mounted () {
+    this.$store.dispatch('get_files')
+  } 
 }
 </script>
 
@@ -129,6 +141,10 @@ export default {
           line-height: 30px;
           margin-left: 10px;
           display: inline-block;
+        }
+        .createdAt {
+          position: absolute;
+          right: 180px;
         }
         &:hover {
           cursor: pointer;

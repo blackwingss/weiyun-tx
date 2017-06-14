@@ -6,8 +6,9 @@ export default {
         pdfs = [],
         musics = [],
         others = [],
-        videos = []
-
+        videos = [],
+        allFiles = data
+    state.files.allFiles = allFiles
     for (let item of data) {
       if (item['mime_type'].split('/')[0] === 'image') {
         pictures.push(item)
@@ -49,5 +50,8 @@ export default {
   },
   [ types.UPLOAD_FILE_FAIL ] (state, err) {
     state.upload_msg = err
+  },
+  [ types.HD_SW_UPLOAD_PANEL ] (state) {
+    state.B_upload_panel = !state.B_upload_panel
   }
 }
