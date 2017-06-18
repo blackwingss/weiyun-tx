@@ -7,11 +7,11 @@
           <div class="divider"></div>
           <div class="content">
             <ul>
-              <li v-for="item in pictures" :class="isView ? 'thum_view' : 'list_view'">
+              <li v-for="item in pictures" :class="bView ? 'thum_view' : 'list_view'">
                 <img :src="item.url">
-                <p v-show="!isView">{{item.name}}</p>
-                <p class="createdAt" v-show="!isView">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
-                <a :href="item.url" :class="isView ? 'cover' : 'rightBtn'" target="_blank">查看大图</a>
+                <p v-show="!bView">{{item.name}}</p>
+                <p class="createdAt" v-show="!bView">{{item.createdAt.split('T')[0]}} {{item.createdAt.split('T')[1].split('.')[0]}}</p>
+                <a :href="item.url" :class="bView ? 'cover' : 'rightBtn'" target="_blank">查看大图</a>
               </li>
             </ul>
           </div>
@@ -27,7 +27,7 @@ export default {
   computed: {
     ...mapGetters({
       pictures: 'getPictures',
-      isView: 'getIsView'
+      bView: 'getBview'
     })
   }
 }

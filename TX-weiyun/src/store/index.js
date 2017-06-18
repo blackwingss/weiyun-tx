@@ -1,11 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import todos from './todos/'
+// module
+import aboutFile from './modules/aboutFile'
+import aboutState from './modules/aboutState'
+
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    todos
+    aboutFile,
+    aboutState
   } 
 })

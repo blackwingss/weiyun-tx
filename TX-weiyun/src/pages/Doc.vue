@@ -25,8 +25,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      pdfs: 'getPdfs',
-      isView: 'getIsView'
+      pdfs: 'getPdfs'
     })
   }
 }

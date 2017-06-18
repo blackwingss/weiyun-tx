@@ -5,7 +5,7 @@
       <transition name="transfrom">
         <router-view class="router-view"></router-view>
       </transition>      
-      <w-Upload class="w-upload"></w-Upload>
+      <w-Upload></w-Upload>
     </div>
 </template>
 
@@ -13,13 +13,7 @@
 import Header from '@/components/Header.vue';
 import Sider from '@/components/Sider.vue';
 import Upload from '@/components/Upload.vue';
-import { mapGetters } from 'vuex';
 export default {
-  computed: {
-    ...mapGetters({
-      allFiles: 'getAllFiles'
-    })
-  },
   components: {
     'w-Header': Header,
     'w-Sider': Sider,

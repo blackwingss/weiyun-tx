@@ -4,27 +4,28 @@
     <div class="upload_panel">
       <form enctype="multipart/form-data" ref="form" >
         <input id="upload_input" name="fileInput" ref="fileContainer" @change="fileChange" type="file" multiple="multiple" style="display: none;">
-      </form>
-      <label for="upload_input">
-        <div class="chooseFile">
-          选择文件
-        </div>
-      </label>
+      </form>  
+      <div class="upload_title">
+        文件上传
+      </div>    
       <div class="file_preview"> 
         <ul>
           <li v-for="file in localFiles">
             <img :src="file.url" v-show="file.type.split('/')[0] === 'image'" alt="">
             <p v-show="file.type.split('/')[0] !== 'image'">{{file.name}}</p>
-            <div @click="delLocalfiles(file)" class="cover">删除</div>
           </li>
         </ul>
-        <div class="tips" :class="{'active': isActive}" v-show="localFiles.length == 0">请选择文件</div>
+        <label for="upload_input">
+          <div class="chooseFile" :class="{'active': isActive}" v-show="localFiles.length == 0">
+            选择文件
+          </div>
+        </label>
       </div>
       <div class="btn-group clearfix"> 
         <span class="count">已选({{localFiles.length}})</span>          
-        <div class="btn btn-cancel"  @click="hd_UploadPanel">取消</div>
+        <div class="btn btn-cancel"  @click="onCancel">取消</div>
         <div class="btn btn-submit" @click="onSubmit">确定</div>
-        <div class="btn btn-clear" v-show="localFiles.length !== 0" @click="localFiles = []">清空选择</div>
+        <div class="btn btn-clear" v-show="localFiles.length !== 0" @click="onClear">清空选择</div>
       </div>
     </div>
   </div>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data () {
     return {      
@@ -47,12 +48,11 @@ export default {
     })
   },
   methods: {
-    ...mapActions({
-      hd_UploadPanel: 'hd_sw_UploadPanel'
+    ...mapMutations({
+      hd_UploadPanel: 'hd_sw_upload_panel'
     }),
     fileChange (e) {
       let files = e.target.files || e.dataTransfer.files
-      let index = 1    
       for (let file of files) {
         let type =file.type
         let name = file.name        
@@ -60,28 +60,22 @@ export default {
         let fileObj = {
           url,
           name,
-          type,
-          index
+          type
         }        
         this.localFiles.push(fileObj)
-        index++
       }  
     },
-    delLocalfiles (file) {
-      let idx = this.localFiles.indexOf(file)
-      this.localFiles.splice(idx, 1)
-    },
-    onSubmit () {          
-      if (this.localFiles.length !== 0) {           
-        this.$store.dispatch('transformTask', { taskCount: this.localFiles.length, hasTask: true })     
+    onSubmit () {
+      if (this.$refs.fileContainer.files.length !== 0) {           
+        this.$store.commit('transform_task', { taskCount: this.localFiles.length, hasTask: true })     
         this.hd_UploadPanel()
         this.upload()
           .then(() => {
-            this.$store.dispatch('transformTask', { taskCount: this.localFiles.length, hasTask: false })           
+            this.$store.commit('transform_task', { taskCount: this.localFiles.length, hasTask: false })           
             this.$refs.fileContainer.value = ''
             this.localFiles = []  
             this.$store.dispatch('get_files')
-            this.$store.dispatch('resetUploadMsg')            
+            this.$store.commit('reset_upload_msg')       
           })       
       } else {
         this.isActive = true
@@ -102,7 +96,16 @@ export default {
             }
         })        
       })      
-    }     
+    },
+    onCancel () {
+      this.hd_UploadPanel()
+      this.$refs.fileContainer.value = ''
+      this.localFiles.length = 0
+    },
+    onClear () {
+      this.$refs.fileContainer.value = ''
+      this.localFiles = []
+    }   
   }
 }
 </script>
@@ -138,6 +141,11 @@ export default {
       box-shadow: 0 0 12px rgba(15,32,65,.2);
       margin-left: -226px;
       margin-top: -159px;
+      .upload_title {
+        padding: 10px 0;
+        text-align: center;
+        color: #000;
+      }
       .file_preview {
         padding: 12px;
         ul{
@@ -179,10 +187,20 @@ export default {
             }
           }
         }
-        .tips {
+        .chooseFile {
+          margin: 80px auto 0;
+          padding: 7px 10px;
+          width: 20%;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+          box-shadow: 0 0 12px rgba(0,0,0,.2);
           text-align: center;
-          width: 100%;
-          margin-top: 50px;
+          cursor: pointer;
+          border-color: #8BC34A;
+          &:hover {
+            background-color: rgba(0,0,0,.2);
+          }
         }
         .active {
           animation: bounce .3s;
@@ -222,18 +240,6 @@ export default {
           100% {
             transform: translateX(0)
           }
-        }
-      }
-      .chooseFile {
-        padding: 7px 20px;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        box-shadow: 0 0 12px rgba(0,0,0,.2);
-        text-align: center;
-        cursor: pointer;
-        &:hover {
-          background-color: rgba(0,0,0,.2);
         }
       }
       .btn-group {

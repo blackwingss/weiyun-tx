@@ -26,8 +26,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      musics: 'getMusics',
-      isView: 'getIsView'
+      musics: 'getMusics'
     })
   }
 }

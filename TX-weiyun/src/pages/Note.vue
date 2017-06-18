@@ -25,8 +25,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      others: 'getOthers',
-      isView: 'getIsView'
+      others: 'getOthers'
     })
   }
 }
