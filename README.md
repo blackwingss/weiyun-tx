@@ -1,36 +1,37 @@
 UI参照腾讯微云，开发支持感谢FatDong大神的博客源码：[VueBlog](https://github.com/FatDong1/VueBlog)。本次项目只实现了文件上传，上传进度条，视图切换功能，后台接口独立开发。旨在学习：
 ## 前端
 1. 中大型项目中的vuex模块化管理
-  ![](http://upload-images.jianshu.io/upload_images/2795762-fa9594bd1a5e5173.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-fa9594bd1a5e5173.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 2. 基于Promise的axios发送/请求数据
+![](http://upload-images.jianshu.io/upload_images/2795762-50dc5e8811fcbaa2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-   ![](http://upload-images.jianshu.io/upload_images/2795762-50dc5e8811fcbaa2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 3. 在实际项目中使用Promise解决异步问题
+
 4. vue-router的基本使用
+
 5. 组件及Page的概念
-  ![](http://upload-images.jianshu.io/upload_images/2795762-803fdd5ed3b1e1f3.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-803fdd5ed3b1e1f3.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 6. 生产环境和开发环境的域名配置  
-  ![](http://upload-images.jianshu.io/upload_images/2795762-a961f4082b0d1f77.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-a961f4082b0d1f77.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 7. 前端项目打包到Node静态文件夹
-  ![](http://upload-images.jianshu.io/upload_images/2795762-bf49ebaaa7f42432.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-bf49ebaaa7f42432.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 ## 后端
 1. Node.js后端接口的开发（响应获取和上传）
-
-  ![](http://upload-images.jianshu.io/upload_images/2795762-b690edadf723a1f0.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-b690edadf723a1f0.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 2. leancloud数据的读取与存储
+![](http://upload-images.jianshu.io/upload_images/2795762-f01ba46d9656ff4a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-  ![](http://upload-images.jianshu.io/upload_images/2795762-f01ba46d9656ff4a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 3. async/await处理异步
+![](http://upload-images.jianshu.io/upload_images/2795762-398ea961607a2bb4.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-  ![](http://upload-images.jianshu.io/upload_images/2795762-398ea961607a2bb4.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 4. 开发环境的跨域问题
-
-  ![](http://upload-images.jianshu.io/upload_images/2795762-112b1309232cd561.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2795762-112b1309232cd561.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 遇到的问题
 1. 开发环境8080端口请求3000端口引起的跨域问题
@@ -100,4 +101,5 @@ axios({
 ~~~
 
 [线上地址](http://micelid.leanapp.cn/)
+
 项目独立完成，诚请大佬提出建议。
